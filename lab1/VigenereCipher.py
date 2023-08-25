@@ -19,12 +19,11 @@ def vigenere_cipher(text, keyword, mode='encrypt'):
 
     return result
 
-# Example usage:
-plaintext = "HELLO"
-keyword = "KEY"
+
+plaintext = "APPLE"
+keyword = "LEMON"
 encrypted_text = vigenere_cipher(plaintext, keyword, mode='encrypt')
 decrypted_text = vigenere_cipher(encrypted_text, keyword, mode='decrypt')
 
 print("Plaintext:", plaintext)
 print("Encrypted:", encrypted_text)
-print
