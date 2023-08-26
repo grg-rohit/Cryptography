@@ -55,8 +55,8 @@ def decrypt_rail_fence(encrypted_text, rails):
 
     return plaintext
 
-# Example usage:
-plaintext = "HELLO WORLD"
+
+plaintext = "Rohit"
 rails = 3
 encrypted_text = encrypt_rail_fence(plaintext, rails)
 decrypted_text = decrypt_rail_fence(encrypted_text, rails)

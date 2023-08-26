@@ -62,7 +62,7 @@ def encrypt_playfair(plaintext, keyword):
     return encrypted_text
 
 # Example usage:
-plaintext = "HELLO"
+plaintext = "Rohit"
 keyword = "KEY"
 encrypted_text = encrypt_playfair(plaintext, keyword)
 

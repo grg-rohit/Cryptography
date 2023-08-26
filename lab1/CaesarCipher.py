@@ -14,7 +14,7 @@ def ceaserCyEn(plaintext, key):
 def ceaserCyDe(cipherText, key):
     return ceaserCyEn(cipherText, -key)
 
-no = "ZEBRA"
+no = "Rohit"
 key = 5
 
 cipherText = ceaserCyEn(no, key)

@@ -20,7 +20,7 @@ def vigenere_cipher(text, keyword, mode='encrypt'):
     return result
 
 
-plaintext = "APPLE"
+plaintext = "Rohit"
 keyword = "LEMON"
 encrypted_text = vigenere_cipher(plaintext, keyword, mode='encrypt')
 decrypted_text = vigenere_cipher(encrypted_text, keyword, mode='decrypt')

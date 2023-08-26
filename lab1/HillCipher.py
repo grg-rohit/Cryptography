@@ -29,7 +29,7 @@ def hill_cipher_encrypt(plaintext, key_matrix):
     return encrypted_text
 
 # Example usage:
-plaintext = "HELLOWORLD"
+plaintext = "Rohit"
 key_matrix = np.array([[6, 24], [13, 16]])  # 2x2 key matrix
 
 encrypted_text = hill_cipher_encrypt(plaintext, key_matrix)
