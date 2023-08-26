@@ -1,71 +1,107 @@
-def construct_playfair_square(keyword):
-    alphabet = 'ABCDEFGHIKLMNOPQRSTUVWXYZ'
-    keyword = keyword.upper().replace('J', 'I')
-    key_set = set()
-    playfair_square = []
+extra_letter_pos = []
 
-    # Construct the keyword set
-    for letter in keyword:
-        if letter not in key_set:
-            key_set.add(letter)
 
-    # Construct the first row of the Playfair square using the keyword
-    for letter in keyword:
-        playfair_square.append(letter)
+def generate_playfair_matrix(key):
+    key = key.replace("i", "j")  # Replace i with j
+    key += "abcdefghijklmnopqrstuvwxyz"
 
-    # Construct the rest of the Playfair square using the remaining alphabet
-    for letter in alphabet:
-        if letter not in key_set:
-            playfair_square.append(letter)
+    matrix = [[0] * 5 for _ in range(5)]
+    used_letters = set()
 
-    return playfair_square
+    row = 0
+    col = 0
 
-def preprocess_text(text):
-    # Remove non-alphabetic characters and convert to uppercase
-    text = ''.join(char.upper() for char in text if char.isalpha())
-    # Replace 'J' with 'I'
-    text = text.replace('J', 'I')
-    # Separate repeated letters with 'X'
-    text = ''.join(a if a != b else a + 'X' for a, b in zip(text, text[1:] + 'X'))
-    return text
+    for letter in key:
+        if letter not in used_letters:
+            matrix[row][col] = letter
+            used_letters.add(letter)
+            col += 1
+            if col == 5:
+                col = 0
+                row += 1
+                if row == 5:
+                    break
 
-def find_letter_position(playfair_square, letter):
-    position = playfair_square.index(letter)
-    row = position // 5
-    col = position % 5
-    return row, col
+    return matrix
 
-def encrypt_playfair(plaintext, keyword):
-    playfair_square = construct_playfair_square(keyword)
-    plaintext = preprocess_text(plaintext)
-    encrypted_text = ''
 
-    for i in range(0, len(plaintext), 2):
-        char1 = plaintext[i]
-        char2 = plaintext[i + 1]
+def find_letter(matrix, letter):
+    for i in range(5):
+        for j in range(5):
+            if matrix[i][j] == letter:
+                return i, j
 
-        row1, col1 = find_letter_position(playfair_square, char1)
-        row2, col2 = find_letter_position(playfair_square, char2)
+
+def playfair_encrypt(plaintext, key):
+    matrix = generate_playfair_matrix(key)
+    plaintext = plaintext.replace("J", "I")
+    print(matrix)
+
+    # Add filler 'X' for repeated letters and make pairs
+    pairs = []
+    i = 0
+    while i < len(plaintext):
+        if i == len(plaintext) - 1 or plaintext[i] == plaintext[i + 1]:
+            pairs.append(plaintext[i] + "X")
+            i += 1
+            extra_letter_pos.append(i)
+        else:
+            pairs.append(plaintext[i] + plaintext[i + 1])
+            i += 2
+
+    ciphertext = ""
+
+    for pair in pairs:
+        row1, col1 = find_letter(matrix, pair[0])
+        row2, col2 = find_letter(matrix, pair[1])
 
         if row1 == row2:
-            col1 = (col1 + 1) % 5
-            col2 = (col2 + 1) % 5
+            ciphertext += matrix[row1][(col1 + 1) % 5]
+            ciphertext += matrix[row2][(col2 + 1) % 5]
         elif col1 == col2:
-            row1 = (row1 + 1) % 5
-            row2 = (row2 + 1) % 5
+            ciphertext += matrix[(row1 + 1) % 5][col1]
+            ciphertext += matrix[(row2 + 1) % 5][col2]
         else:
-            col1, col2 = col2, col1
+            ciphertext += matrix[row1][col2]
+            ciphertext += matrix[row2][col1]
 
-        encrypted_text += playfair_square[row1 * 5 + col1]
-        encrypted_text += playfair_square[row2 * 5 + col2]
+    return ciphertext
 
-    return encrypted_text
 
-# Example usage:
-plaintext = "Rohit"
-keyword = "KEY"
-encrypted_text = encrypt_playfair(plaintext, keyword)
+def playfair_decrypt(ciphertext, key):
+    matrix = generate_playfair_matrix(key)
+    ciphertext = ciphertext.replace(" ", "").lower()
 
-print("Plaintext:", plaintext)
-print("Keyword:", keyword)
-print("Encrypted:", encrypted_text)
+    plaintext = ""
+
+    for i in range(0, len(ciphertext), 2):
+        row1, col1 = find_letter(matrix, ciphertext[i])
+        row2, col2 = find_letter(matrix, ciphertext[i + 1])
+
+        if row1 == row2:
+            plaintext += matrix[row1][(col1 - 1) % 5]
+            plaintext += matrix[row2][(col2 - 1) % 5]
+        elif col1 == col2:
+            plaintext += matrix[(row1 - 1) % 5][col1]
+            plaintext += matrix[(row2 - 1) % 5][col2]
+        else:
+            plaintext += matrix[row1][col2]
+            plaintext += matrix[row2][col1]
+
+    return plaintext
+
+
+# Main program
+plaintext = input("Enter the plain text: ").replace(" ", "").lower()
+key = input("Enter the key: ").replace(" ", "").lower()
+
+encrypted_name = playfair_encrypt(plaintext, key)
+print("Encrypted text:", encrypted_name)
+
+decrypted_name = playfair_decrypt(encrypted_name, key)
+print("Decrypted text: ", end="")
+
+for char in decrypted_name:
+    if decrypted_name.index(char) in extra_letter_pos:
+        continue
+    print(char, end="")
