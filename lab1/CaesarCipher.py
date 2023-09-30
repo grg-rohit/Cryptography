@@ -14,12 +14,12 @@ def ceaserCyEn(plaintext, key):
 def ceaserCyDe(cipherText, key):
     return ceaserCyEn(cipherText, -key)
 
-no = "Rohit"
-key = 5
+no = "Rohit Gurung"
+key = 10
 
 cipherText = ceaserCyEn(no, key)
-print(cipherText)
+print("Encrypted Text: "+cipherText)
 
-print(ceaserCyDe(cipherText, key))
+print("Decrypted Text: "+ceaserCyDe(cipherText, key))
 
 
