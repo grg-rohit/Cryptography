@@ -25,7 +25,7 @@ matrix = create_alphabet_matrix(word)
 # Convert the list of lists to a NumPy array
 numpy_array = np.array(matrix)
 
-print(numpy_array)
+# print(numpy_array)
 
 #conver matrix to alphabets
 def matrix_to_alphabets(matrix):
@@ -62,20 +62,23 @@ def inverse_2x2_mod(matrix):
 #Inverse matrix
 matro = np.array([[13, 3], [12, 3]])
 inv_matrix = inverse_2x2_mod(matro)
-print("Inverse Matrix (mod 26):\n", inv_matrix)
+# print("Inverse Matrix (mod 26):\n", inv_matrix)
 
 def multiply_matrices(matrix1, matrix2):
     result = np.dot(matrix1, matrix2) % 26
     return result
 
 encrypt_matrix = multiply_matrices(numpy_array, matro)
+print("Encrypted Matrix")
 print(encrypt_matrix)
 
 decrypt_matrix = multiply_matrices(encrypt_matrix, inverse_2x2_mod(matro))
+print("Decrypted Matrix")
 print(decrypt_matrix)
 
 encrypted_texts = matrix_to_alphabets(encrypt_matrix)
 decrypted_texts = matrix_to_alphabets(decrypt_matrix)
-
+print("Encrypted Text: ")
 print(encrypted_texts)
+print("Decrypted Text: ")
 print(decrypted_texts)

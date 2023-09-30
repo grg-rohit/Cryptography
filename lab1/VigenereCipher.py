@@ -40,8 +40,10 @@ def vigenere_decrypt(encrypted_text, key):
     
     return decrypted_text
 
+
+
 if __name__ == '__main__':
-    plain_text = "Rohit"
+    plain_text = "Rohit Gurung"
     key = "KEY"
     
     encrypted_text = vigenere_encrypt(plain_text, key)
