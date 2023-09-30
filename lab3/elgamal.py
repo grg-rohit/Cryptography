@@ -1,64 +1,85 @@
 import random
+from math import pow
 
-# Function to find the modular multiplicative inverse
-def mod_inverse(a, m):
-    m0, x0, x1 = m, 0, 1
-    while a > 1:
-        q = a // m
-        m, a = a % m, m
-        x0, x1 = x1 - q * x0, x0
-    return x1 + m0 if x1 < 0 else x1
+a = random.randint(2, 10)
 
-# Generate ElGamal key pair
-def generate_keypair(p, g):
-    private_key = random.randint(2, p - 2)
-    public_key = pow(g, private_key, p)
-    return (public_key, private_key)
+def gcd(a, b):
+	if a < b:
+		return gcd(b, a)
+	elif a % b == 0:
+		return b;
+	else:
+		return gcd(b, a % b)
 
-# Encrypt a message
-def encrypt(public_key, g, p, message):
-    k = random.randint(2, p - 2)
-    c1 = pow(g, k, p)
-    s = pow(public_key, k, p)
-    c2 = [(s * ord(char)) % p for char in message]
-    return (c1, c2)
+# Generating large random numbers
+def gen_key(q):
 
-# Decrypt a message
-def decrypt(private_key, p, c1, c2):
-    s = pow(c1, private_key, p)
-    message = ''.join([chr((char * mod_inverse(s, p)) % p) for char in c2])
-    return message
+	key = random.randint(pow(10, 20), q)
+	while gcd(q, key) != 1:
+		key = random.randint(pow(10, 20), q)
 
-# Main program
+	return key
+
+# Modular exponentiation
+def power(a, b, c):
+	x = 1
+	y = a
+
+	while b > 0:
+		if b % 2 != 0:
+			x = (x * y) % c;
+		y = (y * y) % c
+		b = int(b / 2)
+
+	return x % c
+
+# Asymmetric encryption
+def encrypt(msg, q, h, g):
+
+	en_msg = []
+
+	k = gen_key(q)# Private key for sender
+	s = power(h, k, q)
+	p = power(g, k, q)
+
+	for i in range(0, len(msg)):
+		en_msg.append(msg[i])
+
+	print("g^k used : ", p)
+	print("g^ak used : ", s)
+	for i in range(0, len(en_msg)):
+		en_msg[i] = s * ord(en_msg[i])
+
+	return en_msg, p
+
+def decrypt(en_msg, p, key, q):
+
+	dr_msg = []
+	h = power(p, key, q)
+	for i in range(0, len(en_msg)):
+		dr_msg.append(chr(int(en_msg[i]/h)))
+
+	return dr_msg
+
+# Driver code
+def main():
+
+	msg = 'encryption'
+	print("Original Message :", msg)
+
+	q = random.randint(pow(10, 20), pow(10, 50))
+	g = random.randint(2, q)
+
+	key = gen_key(q)# Private key for receiver
+	h = power(g, key, q)
+	print("g used : ", g)
+	print("g^a used : ", h)
+
+	en_msg, p = encrypt(msg, q, h, g)
+	dr_msg = decrypt(en_msg, p, key, q)
+	dmsg = ''.join(dr_msg)
+	print("Decrypted Message :", dmsg);
+
+
 if __name__ == '__main__':
-    p = 23  # Replace with a known prime number
-    g = 5   # A known primitive root modulo p
-    public_key, private_key = generate_keypair(p, g)
-
-    print("ElGamal Cryptographic System")
-    print("Public Key (p, g, public_key):", (p, g, public_key))
-    print("Private Key (private_key):", private_key)
-
-    while True:
-        print("\nOptions:")
-        print("1. Encrypt a message")
-        print("2. Decrypt a message")
-        print("3. Exit")
-        choice = input("Select an option: ")
-
-        if choice == '1':
-            message = input("Enter a message to encrypt: ")
-            c1, c2 = encrypt(public_key, g, p, message)
-            print("Encrypted Message:")
-            print("C1:", c1)
-            print("C2:", c2)
-        elif choice == '2':
-            c1 = int(input("Enter C1: "))
-            c2 = [int(char) for char in input("Enter C2 (comma-separated): ").split(',')]
-            decrypted_message = decrypt(private_key, p, c1, c2)
-            print("Decrypted Message:", decrypted_message)
-        elif choice == '3':
-            print("Exiting the program.")
-            break
-        else:
-            print("Invalid option. Please try again.")
+	main()

@@ -66,7 +66,7 @@ def decrypt(cipher_text, private_key):
     return plain_text
 
 # Test the RSA encryption and decryption
-message = "Hellow"
+message = "Shiver"
 print("Original message:", message)
 
 public_key = (n, e)
