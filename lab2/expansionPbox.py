@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 #Expansion P-box
 import random as r
 
@@ -27,7 +27,7 @@ inputText = "10100110010001100110011001100110"
 expandedText = expandInput(inputText)
 
 print("Inital input: ", inputText)
-=======
+
 #Expansion P-box
 import random as r
 
@@ -56,5 +56,5 @@ inputText = "10100110010001100110011001100110"
 expandedText = expandInput(inputText)
 
 print("Inital input: ", inputText)
->>>>>>> 253d83e907da27ab318871f0f4c9e73e01aba6a7
+
 print("Output After Expansion: ", expandedText)

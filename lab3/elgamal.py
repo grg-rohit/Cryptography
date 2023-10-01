@@ -64,7 +64,7 @@ def decrypt(en_msg, p, key, q):
 # Driver code
 def main():
 
-	msg = 'encryption'
+	msg = 'Rohit Gurung'
 	print("Original Message :", msg)
 
 	q = random.randint(pow(10, 20), pow(10, 50))

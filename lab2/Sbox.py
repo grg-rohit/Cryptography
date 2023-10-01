@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 #Sbox 1 in DES
 def sbox1(input_bits):
     sbox = (
@@ -22,7 +22,7 @@ input_bits = [1, 0, 0, 1, 1, 1]
 
 output_bits = sbox1(input_bits)
 print("Input bits:", input_bits)
-=======
+
 #Sbox 1 in DES
 def sbox1(input_bits):
     sbox = (
@@ -46,5 +46,5 @@ input_bits = [1, 0, 0, 1, 1, 1]
 
 output_bits = sbox1(input_bits)
 print("Input bits:", input_bits)
->>>>>>> 253d83e907da27ab318871f0f4c9e73e01aba6a7
+
 print("Output bits:", output_bits)
